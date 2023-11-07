@@ -9,8 +9,7 @@
     
     # set main path depending on where started the script from
     {
-      setwd("reveals_and_psas")
-      main_dir <- getwd()
+      main_dir <- "reveals_and_psas"
     }
     
     # source scripts ====
@@ -183,7 +182,7 @@
 #             }
 #         }
 #     }
-# }
+}
 
 # ///////////////////////////////////////////////////////////////////////////////////////////// ====
 # REVEALS and PSA ==================================================================================

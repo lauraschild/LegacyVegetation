@@ -25,30 +25,35 @@ optimize <- function(RPPs){#vector of RPPs to be optimized
   IDs <- unique(pollen_df$Dataset_ID)
   IDs <- IDs[IDs %in% unique(meta_df$Dataset_ID)]
   source("scripts/REVEALS/reveals_per_site.R", echo=FALSE)
-  cl <- makeCluster(n)
-  clusterExport(cl,
-                list("parameters",
-                     "pollen_df",
-                     "RS",
-                     "urban",
-                     "optimize",
-                     "meta_df",
-                     "taxa",
-                     "class",
-                     "REVEALS_parameters",
-                     "reveals_analysis_per_site",
-                     "rmultinom_reveals",
-                     "rnorm_reveals",
-                     "K_factors"),
-                envir = environment())
+  # cl <- makeCluster(n)
+  # clusterExport(cl,
+  #               list("parameters",
+  #                    "pollen_df",
+  #                    "RS",
+  #                    "urban",
+  #                    "optimize",
+  #                    "meta_df",
+  #                    "taxa",
+  #                    "class",
+  #                    "REVEALS_parameters",
+  #                    "reveals_analysis_per_site",
+  #                    "rmultinom_reveals",
+  #                    "rnorm_reveals",
+  #                    "K_factors"),
+  #               envir = environment())
+  # 
+  # REVEALS_df <- clusterApplyLB(cl,
+  #                              IDs,
+  #                             reveals_analysis_per_site,
+  #                             params = REVEALS_parameters,
+  #                             parallel = FALSE)%>%
+  #   bind_rows()
   
-  REVEALS_df <- clusterApplyLB(cl,
-                               IDs,
-                              reveals_analysis_per_site,
-                              params = REVEALS_parameters)%>%
+  REVEALS_df <- lapply(IDs,
+                       reveals_analysis_per_site,
+                       params = REVEALS_parameters) %>% 
     bind_rows()
   
-  stopCluster(cl)
   REVEALS_df[is.na(REVEALS_df)] <- 0
   
   #reconstruct forest

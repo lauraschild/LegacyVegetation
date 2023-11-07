@@ -65,7 +65,7 @@
       for_southern_sites_use_params_from = "Northern Hemisphere"
 
         
-        parallel = T # NEEDS TO BE UPDATED. run parallel on cluster, remember to update google sheet locally before, if changes has been made to it
+        parallel = F # NEEDS TO BE UPDATED. run parallel on cluster, remember to update google sheet locally before, if changes has been made to it
             nr_parallel_max = 20
         large_basins_last = T # for psa computation a few very large lakes may take many hours, put those to the end of ID list to get most results quick
         overwrite_results = F # set F for resuming computations, set T to make a fresh version of all sites to this subset folder

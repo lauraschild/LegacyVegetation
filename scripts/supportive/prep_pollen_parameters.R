@@ -1,5 +1,5 @@
 #load parameters for continent and edit
-parameter_file <- "data/pollen_meta/parameters.xlsx"
+parameter_file <- "input/pollen_meta/parameters.xlsx"
 
 sheet <- "CF_orig"
 if(continent %in% c("South_America","Indopacific","Africa")) sheet <- "NH_orig"

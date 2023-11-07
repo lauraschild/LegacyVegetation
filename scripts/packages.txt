@@ -1,2 +1,3 @@
 tidyverse
 data.table
+ParallelLogger

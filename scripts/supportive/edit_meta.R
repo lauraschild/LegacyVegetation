@@ -20,7 +20,7 @@ basin_types  =
                    "Delta", "?", "", "Ice cap", "Ice Cap", "Ice"))
 
 #load meta data frame
-meta_df <- read.csv("data/pollen_meta/metadata.txt",
+meta_df <- read.csv("input/pollen_meta/metadata.txt",
                     sep = "\t")%>%
   dplyr::select(Dataset_ID, Basin_Type,Basin_Area)%>%
   #rename basin types to fit three categories

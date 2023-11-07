@@ -1,5 +1,5 @@
 #script to run the optimization
-library(optimParallel)
+#library(optimParallel)
 library(parallel)
 
 source("scripts/supportive/optimization_function.R", echo=FALSE)
