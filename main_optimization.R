@@ -5,7 +5,7 @@ library(dplyr)
 #n <- 20
 
 #numer of taxa to optimize
-m <- 2
+m <- 1
 
 #loop through all continents
 continents <- c("Europe")
@@ -47,7 +47,7 @@ for(continent in continents){
   source("scripts/supportive/reconstruct_correct_validate_functions.R", echo=FALSE)
   
   #run reveals for all sites with new parameters
-  #source("scripts/supportive/final_valid.R", echo=FALSE)
+  source("scripts/supportive/final_valid.R", echo=FALSE)
   
   
 }

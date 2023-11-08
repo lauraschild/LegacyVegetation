@@ -17,7 +17,8 @@ install_missing <- function(package_string){
 packages <- c("tidyverse",
               "data.table",
               "ParallelLogger",
-              "tictoc")
+              "tictoc",
+              "readxl")
 
 #check for existence
 missing <- packages[!unlist(lapply(packages,package_exists))]

@@ -2,7 +2,7 @@
 #script to read REVEALS data
 
 
-path <- paste0("reveals_and_psas/output/PANGAEA/",continent,"_original_RPP.csv")
+path <- paste0("output/PANGAEA/",continent,"_original_RPP.csv")
 
 REVEALS_df <- data.table::fread(path)%>%
   as.data.frame()%>%

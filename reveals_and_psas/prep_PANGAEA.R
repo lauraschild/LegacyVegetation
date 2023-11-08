@@ -108,6 +108,6 @@ prep_PANGAEA <- function(run_dir,
 }
 
 prep_PANGAEA(run_dir = "original_RPP",
-             name_to = "subset")
+             name_to = "original_RPP")
 
 

@@ -17,24 +17,10 @@ parameters <- parameters %>%
          PPE = PPE, 
          PPE.error = PPE_Error)
 #run REVEALS in parallel for last validation
-library(parallel)
-cl <- makeCluster(n)
-clusterExport(cl,
-              list("parameters",
-                   "pollen_df",
-                   "reveals_analysis_per_site",
-                   "meta_df",
-                   "taxa",
-                   "rmultinom_reveals",
-                   "rnorm_reveals",
-                   "K_factors"))
-REVEALS_df <- clusterApplyLB(cl = cl,
-                             IDs,
-                             reveals_analysis_per_site,
-                             params = parameters)%>%
+REVEALS_df <- lapply(IDs,
+                     reveals_analysis_per_site,
+                     params = parameters) %>% 
   bind_rows()
-
-stopCluster(cl)
 
 REVEALS_df[is.na(REVEALS_df)] <- 0
 

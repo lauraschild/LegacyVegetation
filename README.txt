@@ -1,11 +1,26 @@
 Code to reconstruct vegetation from a subset of pollen records following the LegacyVegetation
-dataset.
-	1. reconstruct using REVEALS and original parameters
-		only ten European sites
-	2. optimize parameters
-		only ten European sites and RPP for two taxa
-	3. reconstruct with optimized parameters
-		same ten European sites
-	4. reconstruct forest cover
+dataset. In this repository parts of the analysis can be replicated using a subset of three records.
 
-You can find the results in the output directory.
+The script main_complete.R includes all of the analyses and takes approximately xxx minutes to run all
+scripts in the necessary order.
+
+The following scripts are included in this analysis:
+	- main_REVEALS.R
+		reconstructs vegetation cover from three pollen records using the REVEALS model and the
+		original RPP estimates
+		output: output/PANGAEA/Europe_original_RPP.csv
+	- main_optimization.R
+		optimizes RPP for one taxon (ten in manuscript) to fit modern reconstructed forest cover to 
+		remote sensing forest cover
+		output: output/optimized_RPP_Europe.csv
+			output/figures/valid_Europe.png
+	- main_opti_REVEALS.R
+		uses the optimized RPP to run REVEALS on original pollen record
+		output: output/PANGAEA/optimized_REVEALS_Europe.csv
+	- main_reconstruct_forest.R
+		reconstruct forests cover from Pollen, original REVEALS and optimized REVEALS data
+		output: output/PANGAEA/composition_forest...
+			output/PANAEA/forest...
+
+The results of the optimization will not be comparable to the results shown in the manuscript, as only 
+three records are being used to optimize just one taxon.

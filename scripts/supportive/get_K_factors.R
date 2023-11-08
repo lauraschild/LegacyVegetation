@@ -5,7 +5,6 @@ rm(list = ls())
 source("scripts/REVEALS/reveals_and_PSA_functions.R", echo=FALSE)
 library(parallel)
 library(dplyr)
-n_cores <- 6
 
 #get all possible fallspeeds
 fallspeeds <- c()
@@ -14,14 +13,14 @@ for(continent in c("Europe")){
   source("scripts/supportive/prep_pollen_parameters.R")
   fallspeeds <- c(fallspeeds, parameters$Fallspeed)
   source("scripts/reconstruct/load_pollen_complete.R")
-  #source("scripts/supportive/get_new_parameters.R")
+  source("scripts/supportive/get_new_parameters.R")
   fallspeeds <- c(fallspeeds, parameters$Fallspeed)
   rm(parameters)
 }
 
 
 vgs <- unique(fallspeeds)
-K <- read.csv("input/K_factors_old.csv")
+K <- read.csv("input/K_factors.csv")
 
 vgs <- vgs[!vgs %in% unique(K$fallspeed)]
 #get unique combinations of basin types and basin diameters

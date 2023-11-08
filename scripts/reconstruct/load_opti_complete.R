@@ -1,5 +1,5 @@
 #load opti complete
-filepath <- paste0("output/reconstructions/test_optimized_REVEALS_",continent,".csv")
+filepath <- paste0("output/PANGAEA/optimized_REVEALS_",continent,".csv")
 
 opti_df <- data.table::fread(filepath)%>%
   as.data.frame()%>%
