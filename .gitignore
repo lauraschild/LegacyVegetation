@@ -8,4 +8,4 @@ output/figures/*
 !output/PANGAEA
 output/PANGAEA/*
 !output/PANGAEA/.gitkeep
-reveals_and_psas/output
+reveals_and_psas/output/*
