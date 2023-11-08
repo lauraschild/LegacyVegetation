@@ -1,8 +1,9 @@
 Code to reconstruct vegetation from a subset of pollen records following the LegacyVegetation
 dataset. In this repository parts of the analysis can be replicated using a subset of three records.
 
-The script main_complete.R includes all of the analyses and takes approximately xxx minutes to run all
-scripts in the necessary order.
+The script main_complete.R includes all of the analyses and takes approximately 6 minutes to run all
+scripts in the necessary order. It is recommended to run this first as it also takes care of packages
+that need to be installed.
 
 The following scripts are included in this analysis:
 	- main_REVEALS.R
