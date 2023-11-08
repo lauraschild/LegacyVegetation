@@ -2,10 +2,10 @@
 .Rhistory
 .RData
 .Ruserdata
+reveals_and_psas/output/*
 !output/figures
 output/figures/*
 !output/figures/.gitkeep
 !output/PANGAEA
 output/PANGAEA/*
 !output/PANGAEA/.gitkeep
-reveals_and_psas/output/*
