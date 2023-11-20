@@ -33,7 +33,8 @@ prep_PANGAEA <- function(run_dir,
     
     if(continent == "North_America") {
       pollen_df <- lapply(c("north_america_east","north_america_west"),
-                          function(x) read_tsv(paste0(pollen_file,x,".csv"))%>%
+                          function(x) read.csv(paste0(pollen_file,tolower(x),".csv"),
+                                               sep = "\t")%>%
                             mutate(Sample_ID = as.character(Sample_ID)))%>%
         bind_rows()
     }else{

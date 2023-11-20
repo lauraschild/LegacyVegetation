@@ -9,3 +9,5 @@ output/figures/*
 !output/PANGAEA
 output/PANGAEA/*
 !output/PANGAEA/.gitkeep
+output/optimized_RPP_Europe.csv
+

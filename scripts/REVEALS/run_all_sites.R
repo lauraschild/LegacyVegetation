@@ -20,5 +20,9 @@ REVEALS_df <- lapply(IDs,
                      params = parameters) %>% 
   bind_rows()
 
-REVEALS_df[is.na(REVEALS_df)] <- 0
+meta <- REVEALS_df[,1:4]
+comp <- REVEALS_df[,-(1:4)]
+comp[is.na(comp)] <- 0
+
+REVEALS_df <- cbind(meta,comp)
 head(REVEALS_df)
