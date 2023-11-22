@@ -25,3 +25,7 @@ The following scripts are included in this analysis:
 
 The results of the optimization will not be comparable to the results shown in the manuscript, as only 
 three records are being used to optimize just one taxon.
+
+Technical specifications:
+	- the code was written and run using R version 4.2.2 on Windows 10 x64
+	- if problems occur while running the code please check your version
