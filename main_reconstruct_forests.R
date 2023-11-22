@@ -33,18 +33,24 @@ for(continent in continents){
   for(i in 1:length(forests)){
     df <- forests[[i]]
     types <- c("Pollen","REVEALS","opti")
-    file <- paste0("output/PANGAEA/composition_forest_",continent,"_",types[i],".csv")
-    data.table::fwrite(df,
-                       file,
-                       row.names = FALSE)
-    
-    df <- df %>%
-      select(any_of(names(pollen_df[,1:13])),
-             forest)
-    file <- paste0("output/PANGAEA/forest_",continent,"_",types[i],".csv")
-    data.table::fwrite(df,
-                       file,
-                       row.names = FALSE)
+    if(i == 3){
+      file <- paste0("output/PANGAEA/composition_forest_",continent,"_",types[i],".csv")
+      data.table::fwrite(df,
+                         file,
+                         row.names = FALSE)
+    }
+    if(i == 2){
+      data.table::fread("output/PANGAEA/Europe_original_RPP.csv") %>% 
+        as.data.frame() %>% 
+        mutate(`forest [cover in %]` = df$forest) %>% 
+        data.table::fwrite("output/PANGAEA/PANGAEA_original_REVEALS_and_forest_Europe.csv")
+    }
+    if(i==3){
+      data.table::fread("output/PANGAEA/optimized_REVEALS_Europe.csv") %>% 
+        as.data.frame() %>% 
+        mutate(`forest [cover in %]` = df$forest) %>% 
+        data.table::fwrite("output/PANGAEA/PANGAEA_optimized_REVEALS_and_forest_Europe.csv")
+    }
   }
 }
 
