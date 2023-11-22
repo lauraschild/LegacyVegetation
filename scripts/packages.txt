@@ -1,3 +1,0 @@
-tidyverse
-data.table
-ParallelLogger

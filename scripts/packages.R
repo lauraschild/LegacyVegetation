@@ -18,7 +18,8 @@ packages <- c("tidyverse",
               "data.table",
               "ParallelLogger",
               "tictoc",
-              "readxl")
+              "readxl",
+              "cowplot")
 
 #check for existence
 missing <- packages[!unlist(lapply(packages,package_exists))]
