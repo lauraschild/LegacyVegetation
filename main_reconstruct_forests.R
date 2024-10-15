@@ -5,53 +5,103 @@ rm(list = ls())
 library(dplyr)
 source("scripts/supportive/reconstruct_correct_validate_functions.R", echo=TRUE)
 continents <- c("Europe")
-class <- read.csv2("input/classification.csv")
+class <- read.csv2("input/classification_revised.csv")
 
-for(continent in continents){
-  #load pollen complete
-  source("scripts/reconstruct/load_pollen_complete.R")
-  pollen_df <- cbind(pollen_df[,1:13],
-                     t(apply(pollen_df[,-(1:13)],
-                             1,
-                             function(x) 100*x/sum(x, na.rm = TRUE))))
+path_check <- dir.exists("output/reconstructions")
+
+if(!path_check) dir.create("output/reconstructions")
+
+#load meta data with basin type
+meta <- data.table::fread("reveals_and_psas/input/metadata2.csv") %>% 
+  as.data.frame() %>% 
+  dplyr::select(Dataset_ID, Continent, Basin_Type,Latitude,Longitude, Basin_Area) %>% 
+  filter(Continent %in% c("Eastern North America","Western North America","Asia","Europe")) %>% 
+  mutate(record_type = ifelse(Basin_Type == "Lake" & Basin_Area >= 500000,
+                              "large lake",
+                              ifelse(Basin_Type == "Lake",
+                                     "small lake",
+                                     ifelse(Basin_Type == "Peat",
+                                            "peatland",
+                                            "no use"))),
+         record_type = ifelse(is.na(record_type),
+                              "small lake",
+                              record_type),
+         Continent = ifelse(Continent %in% c("Europe","Asia"),
+                            Continent,
+                            "North America")) %>% 
+  filter(record_type != "no use", !is.na(record_type)) 
+
+
+#### POLLEN ####
+get_pollen <- function(continent){
+  source("scripts/reconstruct/load_pollen_complete.R",
+         local = TRUE)
   
-  #load REVEALS
-  source("scripts/reconstruct/load_REVEALS_complete.R")
+  pollen_df[,-(1:13)] <- t(apply(pollen_df[,-(1:13)],
+                                 1,
+                                 function(x) 100*x/sum(x,na.rm = TRUE)))
   
-  #load opti
-  source("scripts/reconstruct/load_opti_complete.R")
+  continental_df <- pollen_df %>% 
+    rename(Age_BP = `Age_mean [yrs BP]`) %>% 
+    dplyr::select(-Event,-Pollen_Data_Source, -Site_ID,
+                  -Age_Model_Source,-ends_with("]")) %>% 
+    merge(meta[,c("Dataset_ID","record_type")],
+          by = "Dataset_ID",
+          all.x = TRUE) %>% 
+    reconstruct_forest()
   
-  composition_list <- list(pollen_df,
-                           REVEALS_df,
-                           opti_df)
+  #save forest cover and composition in cont df in reconstruction directory
+  data.table::fwrite(continental_df,
+                     paste0("output/reconstructions/pollen_forest_",
+                            continent,".csv"))
   
-  #lapply on all dfs to reconstruct tree cover
-  forests <- lapply(composition_list,
-                    reconstruct_forest_past)
-  
-  #save as continental
-  for(i in 1:length(forests)){
-    df <- forests[[i]]
-    types <- c("Pollen","REVEALS","opti")
-    if(i == 3){
-      file <- paste0("output/PANGAEA/composition_forest_",continent,"_",types[i],".csv")
-      data.table::fwrite(df,
-                         file,
-                         row.names = FALSE)
-    }
-    if(i == 2){
-      data.table::fread("output/PANGAEA/Europe_original_RPP.csv") %>% 
-        as.data.frame() %>% 
-        mutate(`forest [cover in %]` = df$forest) %>% 
-        data.table::fwrite("output/PANGAEA/PANGAEA_original_REVEALS_and_forest_Europe.csv")
-    }
-    if(i==3){
-      data.table::fread("output/PANGAEA/optimized_REVEALS_Europe.csv") %>% 
-        as.data.frame() %>% 
-        mutate(`forest [cover in %]` = df$forest) %>% 
-        data.table::fwrite("output/PANGAEA/PANGAEA_optimized_REVEALS_and_forest_Europe.csv")
-    }
-  }
+  continental_df %>% 
+    dplyr::select(1:5,record_type, forest) %>% 
+    return()
 }
 
+pollen_forest_site <-lapply(continents,
+                            get_pollen) %>% 
+  bind_rows() 
 
+
+#### REVEALS####
+#retrival function
+get_reveals <- function(continent){
+  source("scripts/reconstruct/load_REVEALS_with_SD.R",
+         local = TRUE)
+  
+  #make df with composition and forest cover
+  continental_df <- REVEALS_df %>% 
+    rename(Age_BP = `Age_mean [yrs BP]`) %>% 
+    dplyr::select(-Event,-Pollen_Data_Source, -Site_ID,
+                  -Age_Model_Source,-ends_with("]")) %>% 
+    merge(meta[,c("Dataset_ID","record_type")]) %>% 
+    reconstruct_forest_with_SD()
+  
+  #save in reconstruction directory
+  data.table::fwrite(continental_df,
+                     paste0("output/reconstructions/REVEALS_with_SD_forest_",
+                            continent,".csv"))
+  
+  #only return with forest cover
+  continental_df %>% 
+    dplyr::select(1:5,record_type, forest_mean) %>% 
+    return()
+}
+
+reveals_forest_site <- lapply(continents,
+                              get_reveals) %>% 
+  bind_rows()
+
+#save just reconstructed forest cover
+reveals_forest_site %>%
+  data.table::fwrite("output/reconstructions/REVEALS_with_SD_forest_complete.csv")
+
+#filter pollen df to only include same records as reveals
+pollen_forest_site <- pollen_forest_site %>% 
+  filter(Dataset_ID %in% unique(reveals_forest_site$Dataset_ID))
+
+#save just reconstructed forest cover
+pollen_forest_site %>% 
+  data.table::fwrite("output/reconstructions/pollen_forest_complete.csv")

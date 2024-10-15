@@ -7,6 +7,7 @@ reveals_and_psas/output/*
 output/figures/*
 !output/figures/.gitkeep
 !output/PANGAEA
+output/reconstructions/*
 output/PANGAEA/*
 !output/PANGAEA/.gitkeep
 output/optimized_RPP_Europe.csv

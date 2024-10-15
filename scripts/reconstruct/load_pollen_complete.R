@@ -21,8 +21,12 @@ keep_taxa <- c(keep_taxa[!(keep_taxa %in% c("Poaceae","Indeterminable"))],"Poace
 
 #and keep the metadata cols
 columns <- c(names(pollen_df[,1:13]),keep_taxa)
-pollen_df <- pollen_df[,columns]
+pollen_df <- pollen_df[,columns] %>% 
+  filter(!Dataset_ID %in% c(17324,
+                            17326))
 
 names(pollen_df)[1:13] <- c("Event","Pollen_Data_Source","Site_ID","Dataset_ID","Longitude","Latitude",
                             "Continent","Age_Model_Source","Age_min [yrs BP]", "Age_max [yrs BP]", "Age_median [yrs BP]",
                             "Age_mean [yrs BP]", "Depth [cm]")
+rm(rescale)
+rm(keep_taxa)

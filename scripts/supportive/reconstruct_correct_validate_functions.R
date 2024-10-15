@@ -1,6 +1,7 @@
 #function to reconstruct forests from compositional data
 #input: dataframe with compositional information + Dataset_IDs
 #output: average tree cover per site
+#REPOS
 
 reconstruct_forest <- function(REVEALS_df){
   trees <- class %>%
@@ -10,14 +11,55 @@ reconstruct_forest <- function(REVEALS_df){
   REVEALS_df$forest <- rowSums(REVEALS_df[names(REVEALS_df) %in% trees],
                               na.rm = TRUE)
   
-  arctic_forest <- REVEALS_df$forest - rowSums(as.data.frame(REVEALS_df[,names(REVEALS_df)%in% c("Betula","Betulaceae")]))
-  REVEALS_df$forest[REVEALS_df$Latitude >= 70] <- arctic_forest[REVEALS_df$Latitude >= 70]
+  arctic_forest <- REVEALS_df$forest - rowSums(as.data.frame(REVEALS_df[,names(REVEALS_df)%in% c("Betula","Betulaceae","Alnus")]))
+  REVEALS_df$forest[REVEALS_df$Latitude >= 60] <- arctic_forest[REVEALS_df$Latitude >= 60]
   
-  forest_df <- REVEALS_df %>%
-    group_by(Dataset_ID)%>%
-    summarize(Longitude = mean(Longitude),
-              Latitude = mean(Latitude),
-              forest = mean(forest))
+  forest_df <- REVEALS_df 
+  
+  return(forest_df)
+  
+}
+
+reconstruct_forest_with_SD <- function(REVEALS_df){
+  #function for calculation the SD with the delta method
+  delta_method <- function(v){
+    v <- v[!(is.na(v))]
+    v <- v[v != 0]
+    n <- length(v)
+    v^2 %>% 
+      sum() %>% 
+      sqrt() %>% 
+      '/'(n) %>% 
+      return()
+  }
+  
+  trees <- class %>%
+    filter(cat == "tree")%>%
+    pull(taxa)
+  
+  #non_arctic
+  #mean
+  REVEALS_df$forest_mean[REVEALS_df$Latitude < 60] <- rowSums(REVEALS_df[REVEALS_df$Latitude < 60,names(REVEALS_df) %in% paste0(trees,"_mean")],
+                                                              na.rm = TRUE) %>% 
+    unname()
+  #sd
+  REVEALS_df$forest_sd[REVEALS_df$Latitude < 60] <- apply(REVEALS_df[REVEALS_df$Latitude < 60,names(REVEALS_df) %in% paste0(trees,"_sd")],
+                                                          1,
+                                                          delta_method) %>% 
+    unname()
+  #arctic
+  arctic_trees <- trees[!(trees %in% c("Betula","Betulaceae","Alnus"))]
+  #mean
+  REVEALS_df$forest_mean[REVEALS_df$Latitude >= 60] <- rowSums(REVEALS_df[REVEALS_df$Latitude >= 60,names(REVEALS_df) %in% paste0(arctic_trees,"_mean")],
+                                                               na.rm = TRUE) %>% 
+    unname()
+  #sd
+  REVEALS_df$forest_sd[REVEALS_df$Latitude >= 60] <- apply(REVEALS_df[REVEALS_df$Latitude >= 60,names(REVEALS_df) %in% paste0(arctic_trees,"_sd")],
+                                                           1,
+                                                           delta_method) %>% 
+    unname()
+  
+  forest_df <- REVEALS_df 
   
   return(forest_df)
   
@@ -31,7 +73,7 @@ reconstruct_forest_past <- function(composition){
   composition$forest <- rowSums(composition[names(composition) %in% trees],
                                 na.rm = TRUE)
   arctic_forest <- composition$forest - rowSums(as.data.frame(composition[,names(composition)%in% c("Betula","Betulaceae")]))
-  composition$forest[composition$Latitude >= 70] <- arctic_forest[composition$Latitude >= 70]
+  composition$forest[composition$Latitude >= 60] <- arctic_forest[composition$Latitude >= 60]
   
   return(composition)
 }

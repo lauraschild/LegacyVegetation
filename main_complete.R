@@ -21,8 +21,4 @@ source("scripts/packages.R")
 
 source("main_REVEALS.R")
 
-source("main_optimization.R")
-
-source("main_opti_REVEALS.R")
-
 source("main_reconstruct_forests.R")

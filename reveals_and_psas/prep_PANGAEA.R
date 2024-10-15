@@ -6,8 +6,7 @@ library(tidyverse)
 
 main_dir <- "reveals_and_psas"
 
-meta <- read.csv(file.path(main_dir,"input/meta_df_from_googlesheet.txt"),
-                 sep = "\t")
+meta <- read.csv(file.path(main_dir,"input/metadata2.csv"))
 
 #function to run on one REVEALS run (run dir and final name as input)
 prep_PANGAEA <- function(run_dir,
@@ -109,6 +108,6 @@ prep_PANGAEA <- function(run_dir,
 }
 
 prep_PANGAEA(run_dir = "original_RPP",
-             name_to = "original_RPP")
+             name_to = "revision")
 
 

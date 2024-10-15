@@ -62,7 +62,7 @@
             meta_df = update_meta_data(meta_df_columns)
         } else {
             # when running from cluster load the new df from disk (thus update before on local pc and changes have been made!)
-            meta_df = suppressWarnings(read.csv(file=meta_df_file, stringsAsFactors = F, sep="\t"))
+            meta_df = suppressWarnings(read.csv(file=meta_df_file, stringsAsFactors = F))
         }
         meta_df = modify_meta_df_for_reveals(meta_df)
     }

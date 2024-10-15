@@ -1,5 +1,6 @@
 
 #  in RStudio press ctrl+Shift+o to see the list of contents 
+#REPOS
 
 # ///////////////////////////////////////////////////////////////////////////////////////////// ====
 # RUN SETTINGS =====================================================================================
@@ -13,14 +14,14 @@
     }
     
     # subset definitions ====
-    output_folder = 'original_RPP'
+    output_folder = 'revision_runs'
     {
         # define a subset by creating a logical filter over rows in the meta data table as to be found in
         # https://docs.google.com/spreadsheets/d/1-_0PGA0Cqpil2Z6a2Pt3c_2yFfNM28XlA-j8Dj5gJN8/edit#gid=527521502
         # filter continents in run_continents below as this is also used for other purposes than filtering meta data
         # subset definitions
         {
-            if (output_folder == 'original_RPP'){
+            if (output_folder == 'revision_runs'){
                 subset_def = str2expression(text="!is.na(meta_df$Basin_Area)")
             }
             
@@ -39,9 +40,9 @@
         
         skip_sites = c() # e.g. to exclude problematic dataset_IDs
         run_continents = c(
-                           #"Asia"
-                           #,"North America"
-                           #,
+                           "Asia"
+                           ,"North America"
+                           ,
                            "Europe"
                            #,
                            # "South America"
@@ -173,7 +174,7 @@
     # google sheet with meta data ====
     {
         meta_df_link = 'https://docs.google.com/spreadsheets/d/1-_0PGA0Cqpil2Z6a2Pt3c_2yFfNM28XlA-j8Dj5gJN8/edit#gid=527521502'
-        meta_df_file = file.path(input_dir, "meta_df_from_googlesheet.txt")
+        meta_df_file = file.path(input_dir, "metadata2.csv")
         meta_df_columns = c("Project", "Event", "Data_Source", 
                             "Site_Name", "Site_Name_Clean",
                             "Site_ID", "Dataset_ID", "Latitude", "Longitude", 
@@ -190,7 +191,7 @@
     
     # rpp and fall speed data ====
     {
-        parameter_file_name = file.path(input_dir, "parameters.xlsx")
+        parameter_file_name = file.path(input_dir, "parameters_new.xlsx")
     }
     
     # log files
