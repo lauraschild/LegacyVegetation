@@ -9,6 +9,7 @@ output/figures/*
 !output/PANGAEA
 !output/reconstructions
 output/reconstructions/*
+!output/reconstructions/.gitkeep
 output/PANGAEA/*
 !output/PANGAEA/.gitkeep
 output/optimized_RPP_Europe.csv
