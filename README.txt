@@ -10,15 +10,10 @@ The following scripts are included in this analysis:
 		reconstructs vegetation cover from three pollen records using the REVEALS model and the
 		original RPP estimates
 		output: output/PANGAEA/Europe_original_RPP.csv
-	- main_optimization.R
-		optimizes RPP for one taxon (ten in manuscript) to fit modern reconstructed forest cover to 
-		remote sensing forest cover
-		output: output/optimized_RPP_Europe.csv
-			output/figures/valid_Europe.png
 	- main_reconstruct_forest.R
 		reconstruct forests cover from Pollen, original REVEALS and optimized REVEALS data
-		output: output/PANGAEA/composition_forest...
-			output/PANAEA/forest...
+		output: output/reconstructions/REVEALS_with_SD_forest_...
+			output/reconstructions/pollen_forest_...
 
 Technical specifications:
 	- the code was written and run using R version 4.2.2 on Windows 10 x64
